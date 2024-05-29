@@ -2,7 +2,16 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 import pdfkit
-
+from dotenv import load_dotenv
+from docx.api import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+from docx.shared import Pt
+# from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+import google.generativeai as genai
+import json
+import os
 
 st.title('Word File Generator')
 
@@ -52,16 +61,6 @@ if df1 is not None and df2 is not None:
 
     if st.button('Start Processing'):
         
-        from docx.api import Document
-        from docx.enum.text import WD_ALIGN_PARAGRAPH
-        from docx.oxml import OxmlElement
-        from docx.oxml.ns import qn
-        from docx.shared import Pt
-        # from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-        import pandas as pd
-        import google.generativeai as genai
-        import json
-
         count=0
         while count<5 :
         
@@ -92,7 +91,13 @@ if df1 is not None and df2 is not None:
                     \n remember I am going to fit your json response in my python script only give me output in above specific json format (with same data types and date format) whenever I hit this prompt with excel file and there is a chance every time excel file does not follow this specific format you need to analyze that excel file and then convert that into that above json format
                     '''
 
-                    genai.configure(api_key='AIzaSyAbxQrYBGdfm8DDNRXYrMSH8rWPRoeraCk')
+                    # Load environment variables
+                    load_dotenv()
+
+                    # Fetch the API key from the environment variables
+                    GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+
+                    genai.configure(api_key=GOOGLE_API_KEY)
                     model = genai.GenerativeModel('gemini-pro')
                     response = model.generate_content(combined_data)
                     # print(response.text)

@@ -4,3 +4,5 @@ Python-IO
 pdfkit
 python-docx
 google-generativeai
+python-dotenv
+os-sys
